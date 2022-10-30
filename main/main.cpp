@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "structs.h";
+#include "structs.h"
+#include "interfaces.h"
 
 int listaMenu(bool firstExec);
 
@@ -7,14 +8,16 @@ int main() {
     int respostaMenu;
     bool firstExec = true;
 
+    Curso* listaCursos;
+
     do {
         respostaMenu = listaMenu(firstExec);
 
         if (firstExec && respostaMenu == 0) {
-            //chamar função relacionada
+            carregarArquivos(listaCursos);
             firstExec = false;
         } else if (!firstExec && respostaMenu == 0) {
-            printf("Impossível executar esta ação mais de uma vez! Por favor, digite uma opção válida.\n");
+            printf("Impossivel executar esta acao mais de uma vez! Por favor, digite uma opcao valida.\n");
         } else if (respostaMenu == 1) {
              //chamar função relacionada
         } else if (respostaMenu == 2) {
