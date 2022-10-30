@@ -1,0 +1,4 @@
+struct Curso
+{
+    /* data */
+};
