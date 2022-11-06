@@ -38,13 +38,21 @@ int inscricao;
 char nome[80];
 Data dataNasc;
 char tipoVaga[2];
-int acertosLin;
-int acertosMat;
-int acertosNat;
-int acertosHum;
-int acertosRed;
 float notaFinal;
 Candidato *prox;
+};
+
+struct MediaDP
+{
+int acertos;
+float media, desvioPadrao;
+};
+
+struct Acertos
+{
+int inscricaoCandidato;
+int lin, mat, nat, hum;
+float red;
 };
 
 #endif

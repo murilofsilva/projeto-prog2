@@ -67,6 +67,61 @@ void quicksort(int p, int r, int *v)
 }
 //Fim do escopo da função de ordenação
 
+//Função que imprime vetor
+void imprimeVetorAcertos(Acertos *vetor, int tam)
+{
+  if (vetor == NULL)
+  {
+    printf("Vetor vazio, nao ha o que ser impresso!\n");
+  }
+  else
+  {
+    printf("\nConteudo do vetor:\n");
+    for (int i=0; i<tam; i++)
+    {
+      printf("Insc: %d; Pontuacao lin: %d; Pontuacao mat: %d; Pontuacao nat: %d; Pontuacao hum: %d; Pontuacao red: %.2f\n", vetor[i].inscricaoCandidato, vetor[i].lin, vetor[i].mat, vetor[i].nat,vetor[i].hum, vetor[i].red);
+      if (i == tam-1) printf("\n");
+    }
+  }
+}
+//Fim da função que imprime vetor
+
+void imprimeVetorMediaDP(int *lin, int *mat, int *nat, int *hum, int tam)
+{
+  if (lin == NULL)
+  {
+    printf("Vetor vazio, nao ha o que ser impresso!\n");
+  }
+  else
+  {
+    printf("\nConteudo do vetor media e desvio padrao:\n");
+    printf("\nVetor lin:\n");
+    for (int i=0; i<tam; i++)
+    {
+      printf("%d\n", lin[i]);
+      if (i == tam-1) printf("\n");
+    }
+    printf("\nVetor mat:\n");
+    for (int i=0; i<tam; i++)
+    {
+      printf("%d\n", mat[i]);
+      if (i == tam-1) printf("\n");
+    }
+    printf("\nVetor nat:\n");
+    for (int i=0; i<tam; i++)
+    {
+      printf("%d\n", nat[i]);
+      if (i == tam-1) printf("\n");
+    }
+    printf("\nVetor hum:\n");
+    for (int i=0; i<tam; i++)
+    {
+      printf("%d\n", hum[i]);
+      if (i == tam-1) printf("\n");
+    }
+  }
+}
+
 //Função que adiciona nós numa lista encadeada do tipo fila
 void addInscrito(Candidato *&listaI, Candidato *&listaF, Candidato candidato)
 {
@@ -128,6 +183,91 @@ void carregaCandidato(Candidato *&listaCandidatosI , Candidato *&listaCandidatos
 }
 //Fim do escopo que carrega candidatos
 
+//Função que calcula nota final
+// float calculaNotaFinal(int lin, int mat, int nat, int hum, float red, float &media, float &desvioPadrao)
+// {
+//   calculaMediaDesvioPadrao(media, desvioPadrao);
+// }
+//Fim da função que calcula nota final
+
+//Função que conta acertos dos candidatos
+void carregaAcertosCandidatos(Candidato *&listaCandidatosI, Candidato *&listaCandidatosF)
+{
+  FILE *arquivo;
+  int inscCand, qtd, *acertosLin, *acertosMat, *acertosNat, *acertosHum;
+  float acertosRed, media, desvioPadrao;
+  Acertos *acertos;
+  arquivo = fopen("../arquivos/muriloTestAcertos.txt", "r");
+  if (!arquivo)
+  {
+    printf("Arquivo nao pode ser aberto.\n");
+  }
+  else
+  {
+    fscanf(arquivo, "%d", &qtd);
+    acertos = (Acertos *) malloc(qtd * sizeof(Acertos));
+    acertosLin = (int *) malloc(qtd * sizeof(int));
+    acertosMat = (int *) malloc(qtd * sizeof(int));
+    acertosNat = (int *) malloc(qtd * sizeof(int));
+    acertosHum = (int *) malloc(qtd * sizeof(int));
+    for (int i=0; i<qtd; i++)
+      {
+        fscanf(arquivo, "%d", &acertos[i].inscricaoCandidato);
+        fscanf(arquivo, "%d", &acertos[i].lin);
+        fscanf(arquivo, "%d", &acertos[i].mat);
+        fscanf(arquivo, "%d", &acertos[i].nat);
+        fscanf(arquivo, "%d", &acertos[i].hum);
+        fscanf(arquivo, "%f", &acertos[i].red);
+      }
+    fclose(arquivo);
+    arquivo = fopen("../arquivos/muriloTestAcertos.txt", "r");
+    fscanf(arquivo, "%d", &qtd);
+     for (int i=0; i<qtd; i++)
+      {
+        fscanf(arquivo, "%d", &inscCand);
+        fscanf(arquivo, "%d", &acertosLin[i]);
+        fscanf(arquivo, "%d", &acertosMat[i]);
+        fscanf(arquivo, "%d", &acertosNat[i]);
+        fscanf(arquivo, "%d", &acertosHum[i]);
+        fscanf(arquivo, "%f", &acertosRed);
+      }
+    //A partir daqui estou fazendo um vinculo entre o candidato e seus acertos
+    // arquivo = fopen("../arquivos/muriloTestAcertos.txt", "r");
+    // fscanf(arquivo, "%d", &qtd);
+    // do
+    // {
+    //   fscanf(arquivo, "%d", &inscCand);
+    //   if (listaCandidatosI == NULL)
+    //   {
+    //     printf("Nao ha candidatos para receberem atribuicao de notas.\n");
+    //   }
+    //   else
+    //   {
+    //     Candidato *p = listaCandidatosI;
+    //     do
+    //     {
+    //       if (p->inscricao == inscCand)
+    //       {
+    //         fscanf(arquivo, "%d", &acertosLin);
+    //         fscanf(arquivo, "%d", &acertosMat);
+    //         fscanf(arquivo, "%d", &acertosNat);
+    //         fscanf(arquivo, "%d", &acertosHum);
+    //         fscanf(arquivo, "%f", &acertosRed);
+    //         // p->notaFinal = calculaNotaFinal(acertosLin, acertosMat, acertosNat, acertosHum, acertosRed, media, desvioPadrao);
+    //       }
+    //       p = p->prox;
+    //     } while (p != NULL);
+        
+    //   }
+    // } while (!feof(arquivo));
+    fclose(arquivo);
+    imprimeVetorAcertos(acertos, qtd);
+    imprimeVetorMediaDP(acertosLin, acertosMat, acertosNat, acertosHum, qtd);
+    // free(vetor);
+  }
+}
+//Fim da função que conta acertos
+
 //Função que imprime a lista
 void imprimeLista(Candidato *lst)
 {
@@ -138,10 +278,12 @@ void imprimeLista(Candidato *lst)
     else
     {
     Candidato *p = lst;
-        do{
-            p->prox != NULL ? printf("%s, ", p->nome) : printf("%s\n", p->nome);
-            p = p->prox;
-        }while(p != NULL);
-    }
+      printf("\nConteúdo da lista:\n");
+      do{
+          printf("Insc cand: %d; Cod curso: %d; Data nasc: %d/%d/%d; Tipo vaga: %s; Nota Final: %.2f\n", p->inscricao, p->codigoCurso, p->dataNasc.dia, p->dataNasc.mes, p->dataNasc.ano, p->tipoVaga, p->notaFinal);
+          if (p->prox == NULL) printf ("\n");
+          p = p->prox;
+      }while(p != NULL);
+  }
 }
 //Fim da função que imprime a lista

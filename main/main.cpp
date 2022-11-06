@@ -14,6 +14,7 @@ int main() {
 
         if (firstExec && respostaMenu == 0) {
             carregaCandidato(listaCandidatosI, listaCandidatosF);
+            carregaAcertosCandidatos(listaCandidatosI, listaCandidatosF);
             imprimeLista(listaCandidatosI);
 //            carregarArquivos(listaCursos);
             firstExec = false;
