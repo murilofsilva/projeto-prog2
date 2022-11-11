@@ -52,7 +52,7 @@ struct Acertos
 {
 int inscricaoCandidato;
 int lin, mat, nat, hum;
-float red;
+float red, epLin, epMat, epNat, epHum;
 };
 
 #endif

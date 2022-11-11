@@ -1,4 +1,5 @@
 #include "structs.h"
+#include <math.h>
 
 //void carregarArquivos(Curso* listaCursos)
 //{
@@ -79,7 +80,7 @@ void imprimeVetorAcertos(Acertos *vetor, int tam)
     printf("\nConteudo do vetor:\n");
     for (int i=0; i<tam; i++)
     {
-      printf("Insc: %d; Pontuacao lin: %d; Pontuacao mat: %d; Pontuacao nat: %d; Pontuacao hum: %d; Pontuacao red: %.2f\n", vetor[i].inscricaoCandidato, vetor[i].lin, vetor[i].mat, vetor[i].nat,vetor[i].hum, vetor[i].red);
+      printf("Insc: %d; Pontuacao lin: %d; Pontuacao mat: %d; Pontuacao nat: %d; Pontuacao hum: %d; Pontuacao red: %.2f; Escore Padronizado Mat: %.1f; Escore Padronizado Nat: %.1f; Escore Padronizado Lin: %.1f; Escore Padronizado Hum: %.1f\n", vetor[i].inscricaoCandidato, vetor[i].lin, vetor[i].mat, vetor[i].nat,vetor[i].hum, vetor[i].red, vetor[i].epMat, vetor[i].epNat, vetor[i].epLin, vetor[i].epHum);
       if (i == tam-1) printf("\n");
     }
   }
@@ -183,6 +184,29 @@ void carregaCandidato(Candidato *&listaCandidatosI , Candidato *&listaCandidatos
 }
 //Fim do escopo que carrega candidatos
 
+//Função que calcula Escore Padronizado
+float calcularEscorePadronizado(int qtdAcertos, float media, float desvioPadrao)
+{
+  float ep = 0.0;
+  ep = (2*qtdAcertos) - media;
+  ep = ep/desvioPadrao;
+  ep = ep*100;
+  return ep + 500;
+}
+//Fim da função que calcula Escore Padronizado
+
+//Função que calcula média e desvio padrão
+void calculaMediaDesvioPadrao(int *vetor, int tam, float &nMedia, float &nDesv)
+{
+  for(int i=0; i<tam; i++)
+    nMedia = nMedia + vetor[i];
+  nMedia = nMedia/tam;
+  for(int i=0; i<tam; i++)
+    nDesv = nDesv + pow(vetor[i] - nMedia, 2);
+  nDesv = sqrt(nDesv/(tam-1));
+}
+//Fim da função que calcula média e desvio padrão
+
 //Função que calcula nota final
 // float calculaNotaFinal(int lin, int mat, int nat, int hum, float red, float &media, float &desvioPadrao)
 // {
@@ -191,7 +215,8 @@ void carregaCandidato(Candidato *&listaCandidatosI , Candidato *&listaCandidatos
 //Fim da função que calcula nota final
 
 //Função que conta acertos dos candidatos
-void carregaAcertosCandidatos(Candidato *&listaCandidatosI, Candidato *&listaCandidatosF)
+void carregaAcertosCandidatos(Candidato *&listaCandidatosI, Candidato *&listaCandidatosF,
+float &mMat, float &dMat, float &mNat, float &dNat, float &mLin, float &dLin, float &mHum, float &dHum)
 {
   FILE *arquivo;
   int inscCand, qtd, *acertosLin, *acertosMat, *acertosNat, *acertosHum;
@@ -231,6 +256,18 @@ void carregaAcertosCandidatos(Candidato *&listaCandidatosI, Candidato *&listaCan
         fscanf(arquivo, "%d", &acertosHum[i]);
         fscanf(arquivo, "%f", &acertosRed);
       }
+    calculaMediaDesvioPadrao(acertosLin, qtd, mLin, dLin);
+    calculaMediaDesvioPadrao(acertosMat, qtd, mMat, dMat);
+    calculaMediaDesvioPadrao(acertosNat, qtd, mNat, dNat);
+    calculaMediaDesvioPadrao(acertosHum, qtd, mHum, dHum);
+    for (int i=0; i<qtd; i++)
+      {
+        acertos[i].epMat = calcularEscorePadronizado(acertos[i].mat, mMat, dMat);
+        acertos[i].epNat = calcularEscorePadronizado(acertos[i].nat, mNat, dNat);
+        acertos[i].epLin = calcularEscorePadronizado(acertos[i].lin, mLin, dLin);
+        acertos[i].epHum = calcularEscorePadronizado(acertos[i].hum, mHum, dHum);
+      }
+
     //A partir daqui estou fazendo um vinculo entre o candidato e seus acertos
     // arquivo = fopen("../arquivos/muriloTestAcertos.txt", "r");
     // fscanf(arquivo, "%d", &qtd);
