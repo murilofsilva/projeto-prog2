@@ -1,16 +1,6 @@
 #include "structs.h"
 #include <math.h>
 
-//void carregarArquivos(Curso* listaCursos)
-//{
-//    carregarCursos(listaCursos);
-//}
-//
-//void carregarCursos(Curso* listaCursos)
-//{
-//
-//}
-
 //Função que lista o menu
 int listaMenu(bool firstExec)
 {
@@ -153,7 +143,7 @@ void carregaCandidato(Candidato *&listaCandidatosI , Candidato *&listaCandidatos
 {
     FILE* arquivo;
     int codCurso, qtdInscritos;
-    arquivo = fopen("../arquivos/muriloTest.txt", "r");
+    arquivo = fopen("../arquivos/dados.txt", "r");
 
     if (!arquivo)
     {
@@ -195,6 +185,66 @@ float calcularEscorePadronizado(int qtdAcertos, float media, float desvioPadrao)
 }
 //Fim da função que calcula Escore Padronizado
 
+//Funcao que altera notas de redacao de um candidato
+void alteraNotaRedacao(char nomeArquivo[], Acertos *&vetor, int tam)
+{
+  float notaAnterior = 0, novaNota = 0;
+  int insc = 0;
+  char caminhoArquivo[strlen("../arquivos/")+strlen(nomeArquivo)] = "../arquivos/";
+  strncat(caminhoArquivo, nomeArquivo, strlen(nomeArquivo));
+  FILE *arquivo = fopen(caminhoArquivo, "r");
+  if (!arquivo)
+  {
+    printf("Arquivo nao pode ser aberto!\n");
+  }
+  else
+  {
+    while (!feof(arquivo))
+    {
+      fscanf(arquivo, "%d", &insc);
+      fscanf(arquivo, "%f", &notaAnterior);
+      fscanf(arquivo, "%f", &novaNota);
+      for (int i=0; i<tam; i++)
+      {
+        if (vetor[i].inscricaoCandidato == insc)
+        {
+          vetor[i].red = novaNota;
+          break;
+        }
+      }
+    }
+  }
+}
+//Fim da funcao que altera notas de redacao de um candidato
+
+void showCandidato(Candidato *lista, int insc)
+{
+  bool achou = false;
+  if (lista == NULL)
+  {
+    printf("Candidato não cadastrado!\n");
+  }
+  else
+  {
+    while(lista != NULL)
+    {
+      if (lista->inscricao == insc)
+      {
+        printf("Informações do candidato %d:\n", insc);
+        printf("Inscrição: %d\n", insc);
+        printf("Nome: %s\n", lista->nome);
+        printf("Data de nascimento: %d/%d/%d\n", lista->dataNasc.dia, lista->dataNasc.mes, lista->dataNasc.ano);
+        // printf("Curso desejado: %");
+        achou = true;
+        break;
+      }
+      lista = lista->prox;
+    }
+  }
+  if (!achou)
+    printf("Candidato não cadastrado!\n");
+}
+
 //Função que calcula média e desvio padrão
 void calculaMediaDesvioPadrao(int *vetor, int tam, float &nMedia, float &nDesv)
 {
@@ -207,22 +257,15 @@ void calculaMediaDesvioPadrao(int *vetor, int tam, float &nMedia, float &nDesv)
 }
 //Fim da função que calcula média e desvio padrão
 
-//Função que calcula nota final
-// float calculaNotaFinal(int lin, int mat, int nat, int hum, float red, float &media, float &desvioPadrao)
-// {
-//   calculaMediaDesvioPadrao(media, desvioPadrao);
-// }
-//Fim da função que calcula nota final
-
 //Função que conta acertos dos candidatos
-void carregaAcertosCandidatos(Candidato *&listaCandidatosI, Candidato *&listaCandidatosF,
-float &mMat, float &dMat, float &mNat, float &dNat, float &mLin, float &dLin, float &mHum, float &dHum)
+Acertos* carregaAcertosCandidatos(Candidato *&listaCandidatosI, Candidato *&listaCandidatosF,
+float &mMat, float &dMat, float &mNat, float &dNat, float &mLin, float &dLin, float &mHum, float &dHum, int &qtd)
 {
   FILE *arquivo;
-  int inscCand, qtd, *acertosLin, *acertosMat, *acertosNat, *acertosHum;
+  int inscCand, *acertosLin, *acertosMat, *acertosNat, *acertosHum;
   float acertosRed, media, desvioPadrao;
-  Acertos *acertos;
-  arquivo = fopen("../arquivos/muriloTestAcertos.txt", "r");
+  Acertos *acertos = NULL;
+  arquivo = fopen("../arquivos/acertos.txt", "r");
   if (!arquivo)
   {
     printf("Arquivo nao pode ser aberto.\n");
@@ -245,7 +288,7 @@ float &mMat, float &dMat, float &mNat, float &dNat, float &mLin, float &dLin, fl
         fscanf(arquivo, "%f", &acertos[i].red);
       }
     fclose(arquivo);
-    arquivo = fopen("../arquivos/muriloTestAcertos.txt", "r");
+    arquivo = fopen("../arquivos/acertos.txt", "r");
     fscanf(arquivo, "%d", &qtd);
      for (int i=0; i<qtd; i++)
       {
@@ -267,41 +310,9 @@ float &mMat, float &dMat, float &mNat, float &dNat, float &mLin, float &dLin, fl
         acertos[i].epLin = calcularEscorePadronizado(acertos[i].lin, mLin, dLin);
         acertos[i].epHum = calcularEscorePadronizado(acertos[i].hum, mHum, dHum);
       }
-
-    //A partir daqui estou fazendo um vinculo entre o candidato e seus acertos
-    // arquivo = fopen("../arquivos/muriloTestAcertos.txt", "r");
-    // fscanf(arquivo, "%d", &qtd);
-    // do
-    // {
-    //   fscanf(arquivo, "%d", &inscCand);
-    //   if (listaCandidatosI == NULL)
-    //   {
-    //     printf("Nao ha candidatos para receberem atribuicao de notas.\n");
-    //   }
-    //   else
-    //   {
-    //     Candidato *p = listaCandidatosI;
-    //     do
-    //     {
-    //       if (p->inscricao == inscCand)
-    //       {
-    //         fscanf(arquivo, "%d", &acertosLin);
-    //         fscanf(arquivo, "%d", &acertosMat);
-    //         fscanf(arquivo, "%d", &acertosNat);
-    //         fscanf(arquivo, "%d", &acertosHum);
-    //         fscanf(arquivo, "%f", &acertosRed);
-    //         // p->notaFinal = calculaNotaFinal(acertosLin, acertosMat, acertosNat, acertosHum, acertosRed, media, desvioPadrao);
-    //       }
-    //       p = p->prox;
-    //     } while (p != NULL);
-        
-    //   }
-    // } while (!feof(arquivo));
     fclose(arquivo);
-    imprimeVetorAcertos(acertos, qtd);
-    imprimeVetorMediaDP(acertosLin, acertosMat, acertosNat, acertosHum, qtd);
-    // free(vetor);
   }
+  return acertos;
 }
 //Fim da função que conta acertos
 
