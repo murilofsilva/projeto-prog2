@@ -1,9 +1,8 @@
-#include <stdio.h>
-#include "structs.h"
 #include "interfaces.h"
 
 int main() {
     Candidato *listaCandidatosI = NULL, *listaCandidatosF = NULL;
+    Curso *inicioListaCursos = NULL, *fimListaCursos = NULL;
     Acertos *acertos;
     int respostaMenu, qtd=0, insc;
     bool firstExec = true;
@@ -16,6 +15,7 @@ int main() {
 
         if (firstExec && respostaMenu == 0) {
             carregaCandidato(listaCandidatosI, listaCandidatosF);
+            carregarCursos(inicioListaCursos, fimListaCursos);
             acertos = carregaAcertosCandidatos(listaCandidatosI, listaCandidatosF, mMat, dMat, mNat, dNat, mLin, dLin, mHum, dHum, qtd);
             firstExec = false;
         } else if (!firstExec && respostaMenu == 0) {

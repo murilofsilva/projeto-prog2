@@ -10,6 +10,8 @@ void imprimeLista(Candidato *lst);
 
 void carregaCandidato(Candidato *&listaCandidatosI , Candidato *&listaCandidatosF);
 
+void carregarCursos(Curso *&inicioListaCursos, Curso *&fimListaCursos);
+
 Acertos* carregaAcertosCandidatos(Candidato *&listaCandidatosI, Candidato *&listaCandidatosF,
 float &mMat, float &dMat, float &mNat, float &dNat, float &mLin, float &dLin, float &mHum, float &dHum, int &qtd);
 
