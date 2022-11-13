@@ -1,9 +1,8 @@
-#include <stdio.h>
-#include "structs.h"
 #include "interfaces.h"
 
 int main() {
     Candidato *listaCandidatosI = NULL, *listaCandidatosF = NULL;
+    Curso *inicioListaCursos = NULL, *fimListaCursos = NULL;
     int respostaMenu;
     bool firstExec = true;
     float mMat=0.0, dMat=0.0, mNat=0.0, dNat=0.0, mLin=0.0, dLin=0.0, mHum=0.0, dHum=0.0;
@@ -18,7 +17,7 @@ int main() {
             carregaCandidato(listaCandidatosI, listaCandidatosF);
             carregaAcertosCandidatos(listaCandidatosI, listaCandidatosF, mMat, dMat, mNat, dNat, mLin, dLin, mHum, dHum);
             imprimeLista(listaCandidatosI);
-//            carregarArquivos(listaCursos);
+            carregarCursos(inicioListaCursos, fimListaCursos);
             firstExec = false;
         } else if (!firstExec && respostaMenu == 0) {
             printf("Impossivel executar esta acao mais de uma vez! Por favor, digite uma opcao valida.\n");

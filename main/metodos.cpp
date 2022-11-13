@@ -153,7 +153,7 @@ void carregaCandidato(Candidato *&listaCandidatosI , Candidato *&listaCandidatos
 {
     FILE* arquivo;
     int codCurso, qtdInscritos;
-    arquivo = fopen("../arquivos/muriloTest.txt", "r");
+    arquivo = fopen("../arquivos/dados.txt", "r");
 
     if (!arquivo)
     {
@@ -183,6 +183,128 @@ void carregaCandidato(Candidato *&listaCandidatosI , Candidato *&listaCandidatos
     fclose(arquivo);
 }
 //Fim do escopo que carrega candidatos
+
+void adicionarCurso(Curso *&inicioListaCursos, Curso *&fimListaCursos, Curso curso)
+{
+    Curso *novoCurso = (Curso*) calloc(1, sizeof(Curso));
+    novoCurso->codigo = curso.codigo;
+    strcpy(novoCurso->nome, curso.nome);
+    novoCurso->pesoRedacao = curso.pesoRedacao;
+    novoCurso->pesoMatematica = curso.pesoMatematica;
+    novoCurso->pesoLinguagens = curso.pesoLinguagens;
+    novoCurso->pesoHumanas = curso.pesoHumanas;
+    novoCurso->pesoNatureza = curso.pesoNatureza;
+
+    if (inicioListaCursos == NULL)
+    {
+        inicioListaCursos = novoCurso;
+        fimListaCursos = novoCurso;
+    } else
+    {
+        fimListaCursos->proximo = novoCurso;
+        fimListaCursos = novoCurso;
+    }
+}
+
+void imprimirListaCursos(Curso *inicioListaCursos)
+{
+    Curso *ponteiro = inicioListaCursos;
+
+    if (inicioListaCursos == NULL)
+    {
+        printf("\nLista de cursos vazia!\n");
+        return;
+    }
+
+    while (ponteiro != NULL)
+    {
+        printf("Codigo: %d, Nome: %s, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", ponteiro->codigo,
+               ponteiro->nome, ponteiro->vagasAC, ponteiro->vagasL1, ponteiro->vagasL3, ponteiro->vagasL4,
+               ponteiro->vagasL5, ponteiro->vagasL7, ponteiro->vagasL8, ponteiro->vagasL9, ponteiro->vagasL11,
+               ponteiro->vagasL13, ponteiro->vagasL15);
+        ponteiro = ponteiro->proximo;
+    }
+}
+
+void atualizarVagasCursos(Curso *&inicioListaCursos, int codigoCurso, int ac, int l1, int l3, int l4, int l5, int l7,
+                          int l8, int l9, int l11, int l13, int l15)
+{
+    Curso *ponteiro = inicioListaCursos;
+
+    if (inicioListaCursos == NULL) return;
+
+    while (ponteiro != NULL)
+    {
+        if (ponteiro->codigo == codigoCurso)
+        {
+            ponteiro->vagasAC = ac;
+            ponteiro->vagasL1 = l1;
+            ponteiro->vagasL3 = l3;
+            ponteiro->vagasL4 = l4;
+            ponteiro->vagasL5 = l5;
+            ponteiro->vagasL7 = l7;
+            ponteiro->vagasL8 = l8;
+            ponteiro->vagasL9 = l9;
+            ponteiro->vagasL11 = l11;
+            ponteiro->vagasL13 = l13;
+            ponteiro->vagasL15 = l15;
+            break;
+        }
+        ponteiro = ponteiro->proximo;
+    }
+}
+
+void carregarVagasCursos(Curso *&inicioListaCursos)
+{
+    FILE *arquivo;
+    int quantidadeCursos, codigoCurso, ac, l1, l3, l4, l5, l7, l8, l9, l11, l13, l15, i;
+
+    arquivo = fopen("../arquivos/cursos_e_vagas.txt", "r");
+
+    if (!arquivo)
+    {
+        printf("\nArquivo de vagas de cursos não pôde ser aberto.\n");
+        return;
+    }
+
+    fscanf(arquivo, "%d", &quantidadeCursos);
+    do
+    {
+        fscanf(arquivo, "%d %d %d %d %d %d %d %d %d %d %d %d", &codigoCurso, &ac, &l1, &l3, &l4, &l5,
+               &l7, &l8, &l9, &l11, &l13, &l15);
+        atualizarVagasCursos(inicioListaCursos, codigoCurso, ac, l1, l3, l4, l5, l7, l8, l9, l11, l13, l15);
+        i++;
+    } while (i < quantidadeCursos);
+
+    fclose(arquivo);
+}
+
+void carregarCursos(Curso *&inicioListaCursos, Curso *&fimListaCursos)
+{
+    FILE* arquivo;
+    Curso curso;
+    int quantidadeCursos = 0, i = 0;
+
+    arquivo = fopen("../arquivos/cursos_e_pesos.txt", "r");
+
+    if (!arquivo)
+    {
+        printf("\nArquivo de cursos não pôde ser aberto.\n");
+        return;
+    }
+
+    fscanf(arquivo, "%d", &quantidadeCursos);
+    do
+    {
+        fscanf(arquivo, "%d %[^0-9] %d %d %d %d %d", &curso.codigo, curso.nome, &curso.pesoRedacao,
+               &curso.pesoMatematica, &curso.pesoLinguagens, &curso.pesoHumanas, &curso.pesoNatureza);
+        adicionarCurso(inicioListaCursos, fimListaCursos, curso);
+        i++;
+    } while(i < quantidadeCursos);
+
+    carregarVagasCursos(inicioListaCursos);
+    fclose(arquivo);
+}
 
 //Função que calcula Escore Padronizado
 float calcularEscorePadronizado(int qtdAcertos, float media, float desvioPadrao)
@@ -222,7 +344,7 @@ float &mMat, float &dMat, float &mNat, float &dNat, float &mLin, float &dLin, fl
   int inscCand, qtd, *acertosLin, *acertosMat, *acertosNat, *acertosHum;
   float acertosRed, media, desvioPadrao;
   Acertos *acertos;
-  arquivo = fopen("../arquivos/muriloTestAcertos.txt", "r");
+  arquivo = fopen("../arquivos/acertos.txt", "r");
   if (!arquivo)
   {
     printf("Arquivo nao pode ser aberto.\n");
