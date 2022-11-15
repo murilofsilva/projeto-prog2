@@ -67,12 +67,11 @@ void ordenarCandidatosPorCota(int inicioVetor, int fimVetor, Candidato **vetor)
 
 int separaCandidatosPorNota(int inicioVetor, int fimVetor, Candidato **vetor)
 {
-    float pivot = 0;
-    pivot = vetor[fimVetor]->notaFinal;
+    float pivot = vetor[fimVetor]->notaFinal;
     int i = inicioVetor;
     for (int j = inicioVetor; j < fimVetor; j++)
     {
-        if (vetor[j]->notaFinal < pivot)
+        if (vetor[j]->notaFinal > pivot)
         {
             Candidato *auxiliar = vetor[i];
             vetor[i] = vetor[j];
@@ -92,15 +91,15 @@ void quicksortNotas(int inicioVetor, int fimVetor, Candidato **vetor)
     if (inicioVetor < fimVetor)
     {
         q = separaCandidatosPorNota(inicioVetor, fimVetor, vetor);
-        ordenarCandidatosPorCota(inicioVetor, q - 1, vetor);
-        ordenarCandidatosPorCota(q + 1, fimVetor, vetor);
+        quicksortNotas(inicioVetor, q - 1, vetor);
+        quicksortNotas(q + 1, fimVetor, vetor);
     }
 }
 
 void ordenarCandidatosPorNota(int inicioVetor, int fimVetor, Candidato **vetor)
 {
     int n = 1, ini = 0;
-    char anterior[3], atual[3]; 
+    char anterior[3], atual[3];
     strcpy(anterior, vetor[0]->tipoVaga);
     while(n < fimVetor){
         strcpy(atual, vetor[n]->tipoVaga);

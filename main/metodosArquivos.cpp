@@ -78,9 +78,11 @@ void gerarArquivoFinal(Curso **cursosOrdenados, int quantidadeCursos, Candidato 
         ordenarCandidatosPorNota(0, quantidadeCandidatosCurso, vetorCandidatosOrdenados);
 
         for (int candidato = 0; candidato < quantidadeCandidatosCurso; candidato++)
-            fprintf(arquivo, "%d %s %.2f\n", vetorCandidatosOrdenados[candidato]->inscricao,
-                    vetorCandidatosOrdenados[candidato]->tipoVaga, vetorCandidatosOrdenados[candidato]->notaFinal);
-
+            fprintf(arquivo, "%d %f %f %f %f %f %s %.2f\n", vetorCandidatosOrdenados[candidato]->inscricao,
+                    vetorCandidatosOrdenados[candidato]->escoreLin, vetorCandidatosOrdenados[candidato]->escoreMat,
+                    vetorCandidatosOrdenados[candidato]->escoreNat, vetorCandidatosOrdenados[candidato]->escoreHum,
+                    vetorCandidatosOrdenados[candidato]->escoreRed, vetorCandidatosOrdenados[candidato]->tipoVaga,
+                    vetorCandidatosOrdenados[candidato]->notaFinal);
         i++;
     }
 

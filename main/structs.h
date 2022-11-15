@@ -28,29 +28,29 @@ struct Curso
 
 struct Data
 {
-int dia, mes, ano;
+    int dia, mes, ano;
 };
 
 struct Candidato
 {
-int codigoCurso;
-int inscricao;
-char nome[80];
-Data dataNasc;
-char tipoVaga[2];
-float escoreMat, escoreRed, escoreHum, escoreLin, escoreNat, notaFinal;
-Candidato *prox;
+    int codigoCurso;
+    int inscricao;
+    char nome[80];
+    Data dataNasc;
+    char tipoVaga[2];
+    float escoreMat, escoreRed, escoreHum, escoreLin, escoreNat, notaFinal;
+    Candidato *prox;
 };
 
 struct MediaDP
 {
-int acertos;
-float media, desvioPadrao;
+    int acertos;
+    float media, desvioPadrao;
 };
 
 struct Acertos
 {
-int inscricaoCandidato;
-int lin, mat, nat, hum;
-float red, epLin, epMat, epNat, epHum;
+    int inscricaoCandidato;
+    int lin, mat, nat, hum;
+    float red, epLin, epMat, epNat, epHum;
 };
