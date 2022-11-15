@@ -7,6 +7,11 @@ void adicionarCandidatoCurso(Candidato candidato, Candidato *&listaInicio, Candi
     novoCandidato->inscricao = candidato.inscricao;
     strcpy(novoCandidato->tipoVaga, candidato.tipoVaga);
     novoCandidato->notaFinal = candidato.notaFinal;
+    novoCandidato->escoreHum = candidato.escoreHum;
+    novoCandidato->escoreLin = candidato.escoreLin;
+    novoCandidato->escoreMat = candidato.escoreMat;
+    novoCandidato->escoreNat = candidato.escoreNat;
+    novoCandidato->escoreRed = candidato.escoreRed;
     novoCandidato->prox = NULL;
 
     if (listaInicio == NULL)
@@ -74,23 +79,8 @@ void gerarArquivoFinal(Curso **cursosOrdenados, int quantidadeCursos, Candidato 
         for (int candidato = 0; candidato < quantidadeCandidatosCurso; candidato++)
             vetorCandidatosOrdenados[candidato] = vetorCandidatos + candidato;
 
-        // ordenarCandidatosPorCota(0, quantidadeCandidatosCurso - 1, vetorCandidatosOrdenados);
-        // ordenarCandidatosPorNota(0, quantidadeCandidatosCurso, vetorCandidatosOrdenados);
-
-        Candidato *candidato = listaCadidatos;
-        if (candidato != NULL)
-        {
-            do
-            {
-                for (int i = 0; i < quantidadeCandidatosCurso; i++)
-                {
-                    if (vetorCandidatosOrdenados[i]->inscricao == candidato->inscricao)
-                        vetorCandidatosOrdenados[i]->inscricao = candidato->inscricao;
-                }
-                candidato = candidato->prox;
-            } while (candidato != NULL && candidato->prox != NULL);
-            
-        }
+        ordenarCandidatosPorCota(0, quantidadeCandidatosCurso - 1, vetorCandidatosOrdenados);
+        ordenarCandidatosPorNota(0, quantidadeCandidatosCurso, vetorCandidatosOrdenados);
 
         for (int candidato = 0; candidato < quantidadeCandidatosCurso; candidato++)
             fprintf(arquivo, "%d %f %f %f %f %f %s %.2f\n", vetorCandidatosOrdenados[candidato]->inscricao,
