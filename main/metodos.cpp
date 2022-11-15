@@ -376,8 +376,32 @@ void calculaMediaDesvioPadrao(int *vetor, int tam, float &nMedia, float &nDesv)
   for(int i=0; i<tam; i++)
     nDesv = nDesv + pow(vetor[i] - nMedia, 2);
   nDesv = sqrt(nDesv/(tam-1));
+  nMedia = nMedia*2;
+  nDesv = nDesv*2;
 }
 //Fim da função que calcula média e desvio padrão
+
+void calculaNotaFinal(Curso *listaCurso, Candidato *&listaCandidato)
+{
+  float notaFinal = 0;
+  if (listaCurso == NULL || listaCandidato == NULL)
+  {
+    printf("Impossivel calcular nota final. Arquivos incompletos!\n");
+  }
+  else
+  {
+    Candidato *candidato = listaCandidato;
+    do
+    {
+      notaFinal = (listaCurso->pesoRedacao*candidato->escoreRed) + (listaCurso->pesoHumanas*candidato->escoreHum)
+      + (listaCurso->pesoNatureza*candidato->escoreNat) + (listaCurso->pesoLinguagens*candidato->escoreLin)
+      + (listaCurso->pesoMatematica*candidato->escoreMat);
+      notaFinal= notaFinal/(listaCurso->pesoRedacao + listaCurso->pesoHumanas + listaCurso->pesoNatureza + listaCurso->pesoLinguagens + listaCurso->pesoMatematica);
+      candidato->notaFinal = notaFinal;
+      candidato = candidato->prox;
+    } while (candidato != NULL && candidato->prox != NULL);
+  }
+}
 
 //Função que conta acertos dos candidatos
 Acertos* carregaAcertosCandidatos(Candidato *&listaCandidatosI, Candidato *&listaCandidatosF,
@@ -425,12 +449,27 @@ float &mMat, float &dMat, float &mNat, float &dNat, float &mLin, float &dLin, fl
     calculaMediaDesvioPadrao(acertosMat, qtd, mMat, dMat);
     calculaMediaDesvioPadrao(acertosNat, qtd, mNat, dNat);
     calculaMediaDesvioPadrao(acertosHum, qtd, mHum, dHum);
+    Candidato *p = listaCandidatosI;
     for (int i=0; i<qtd; i++)
       {
         acertos[i].epMat = calcularEscorePadronizado(acertos[i].mat, mMat, dMat);
         acertos[i].epNat = calcularEscorePadronizado(acertos[i].nat, mNat, dNat);
         acertos[i].epLin = calcularEscorePadronizado(acertos[i].lin, mLin, dLin);
         acertos[i].epHum = calcularEscorePadronizado(acertos[i].hum, mHum, dHum);
+        Candidato *p = listaCandidatosI;
+        while(p != NULL && p->prox != NULL)
+        {
+          if (p->inscricao == acertos[i].inscricaoCandidato)
+          {
+            p->escoreMat = acertos[i].epMat;
+            p->escoreNat = acertos[i].epNat;
+            p->escoreLin = acertos[i].epLin;
+            p->escoreHum = acertos[i].epHum;
+            p->escoreRed = acertos[i].red;
+            break;
+          }
+          p = p-> prox;
+        }
       }
     fclose(arquivo);
   }

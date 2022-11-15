@@ -28,3 +28,7 @@ void calcularEscorePadronizado(int qtdAcertos, float media, float desvioPadrao);
 void alteraNotaRedacao(char *nomeArquivo, Acertos *&vetor, int qtd);
 
 void showCandidato(Candidato *listaCandidatosI, int insc);
+
+void imprimirListaCursos(Curso *inicioListaCursos);
+
+void calculaNotaFinal(Curso *listaCurso, Candidato *&listaCandidato);

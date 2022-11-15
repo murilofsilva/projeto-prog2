@@ -17,6 +17,7 @@ int main() {
             carregaCandidato(listaCandidatosI, listaCandidatosF);
             carregarCursos(inicioListaCursos, fimListaCursos);
             acertos = carregaAcertosCandidatos(listaCandidatosI, listaCandidatosF, mMat, dMat, mNat, dNat, mLin, dLin, mHum, dHum, qtd);
+            calculaNotaFinal(inicioListaCursos, listaCandidatosI);
             firstExec = false;
         } else if (!firstExec && respostaMenu == 0) {
             printf("Impossivel executar esta acao mais de uma vez! Por favor, digite uma opcao valida.\n");
@@ -35,6 +36,8 @@ int main() {
             scanf("%s", arquivoAlteraNotasRedacao);
             printf("\n");
             alteraNotaRedacao(arquivoAlteraNotasRedacao, acertos, qtd);  
+        } else if (respostaMenu == 6) {
+            imprimeLista(listaCandidatosI);
         } else if (respostaMenu != 5) {
             printf("Favor digitar uma opção válida.\n");
         }

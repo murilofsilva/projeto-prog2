@@ -37,7 +37,7 @@ int inscricao;
 char nome[80];
 Data dataNasc;
 char tipoVaga[2];
-float notaFinal;
+float escoreMat, escoreRed, escoreHum, escoreLin, escoreNat, notaFinal;
 Candidato *prox;
 };
 
