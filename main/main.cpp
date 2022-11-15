@@ -12,7 +12,6 @@ int main() {
 
     do {
         respostaMenu = listaMenu(firstExec);
-
         if (firstExec && respostaMenu == 0) {
             carregaCandidato(listaCandidatosI, listaCandidatosF);
             carregarCursos(inicioListaCursos, fimListaCursos);
@@ -22,7 +21,8 @@ int main() {
         } else if (!firstExec && respostaMenu == 0) {
             printf("Impossivel executar esta acao mais de uma vez! Por favor, digite uma opcao valida.\n");
         } else if (respostaMenu == 1) {
-             //chamar função relacionada
+            //TODO item 1 para gerar arquivo ordenado
+            gerarArquivoInformacoesGerais(inicioListaCursos, listaCandidatosI);
         } else if (respostaMenu == 2) {
             printf("***VISUALIZAR CANDIDATO***\n");
             printf("Digite a inscricao do candidato que desejas visualizar: ");

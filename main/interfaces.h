@@ -1,4 +1,5 @@
 #include "structs.h"
+#include "ordenacao.h"
 
 int listaMenu(bool firstExec);
 
@@ -29,6 +30,6 @@ void alteraNotaRedacao(char *nomeArquivo, Acertos *&vetor, int qtd);
 
 void showCandidato(Candidato *listaCandidatosI, int insc);
 
-void imprimirListaCursos(Curso *inicioListaCursos);
+void gerarArquivoInformacoesGerais(Curso *listaCursos, Candidato *listaCandidatos);
 
 void calculaNotaFinal(Curso *listaCurso, Candidato *&listaCandidato);
