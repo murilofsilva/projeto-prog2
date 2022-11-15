@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 struct Curso
 {
     int codigo;
-    char nome[80];
+    char nome[80+1];
     int pesoRedacao;
     int pesoMatematica;
     int pesoLinguagens;

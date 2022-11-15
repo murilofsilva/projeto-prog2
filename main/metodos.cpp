@@ -1,5 +1,6 @@
 #include "structs.h"
-#include <math.h>
+#include "ordenacao.h"
+#include "metodosArquivos.h"
 
 //Função que lista o menu
 int listaMenu(bool firstExec)
@@ -17,46 +18,6 @@ int listaMenu(bool firstExec)
     return resposta;
 }
 //Fim do escopo da funçãom que lista ao menu
-
-//Função que ordena um vetor a partir do método Quicksort
-void troca(int &a, int &b)
-{
-  int aux;
-  aux = a;
-  a = b;
-  b = aux;
-}
-
-int separa(int p, int r, int *v)
-{
-  int x, i, j;
-  x = v[p];
-  i = p - 1;
-  j = r + 1;
-  while (1) {
-    do {
-      j--;
-    } while (v[j] > x);
-    do {
-      i++;
-    } while (v[i] < x);
-    if (i < j)
-      troca(v[i], v[j]);
-    else
-      return j;
-  }
-}
-
-void quicksort(int p, int r, int *v)
-{
-  int q;
-  if (p < r) {
-    q = separa(p, r, v);
-    quicksort(p, q, v);
-    quicksort(q+1, r, v);
-  }
-}
-//Fim do escopo da função de ordenação
 
 //Função que imprime vetor
 void imprimeVetorAcertos(Acertos *vetor, int tam)
@@ -312,7 +273,8 @@ void alteraNotaRedacao(char nomeArquivo[], Acertos *&vetor, int tam)
 {
   float notaAnterior = 0, novaNota = 0;
   int insc = 0;
-  char caminhoArquivo[strlen("../arquivos/")+strlen(nomeArquivo)] = "../arquivos/";
+  char caminhoArquivo[strlen("../arquivos/")+strlen(nomeArquivo)];
+  strcat(caminhoArquivo, "../arquivos/");
   strncat(caminhoArquivo, nomeArquivo, strlen(nomeArquivo));
   FILE *arquivo = fopen(caminhoArquivo, "r");
   if (!arquivo)
@@ -374,8 +336,8 @@ void calculaMediaDesvioPadrao(int *vetor, int tam, float &nMedia, float &nDesv)
     nMedia = nMedia + vetor[i];
   nMedia = nMedia/tam;
   for(int i=0; i<tam; i++)
-    nDesv = nDesv + pow(vetor[i] - nMedia, 2);
-  nDesv = sqrt(nDesv/(tam-1));
+    nDesv = nDesv + (vetor[i] - nMedia);
+  nDesv = nDesv/(tam-1);
 }
 //Fim da função que calcula média e desvio padrão
 
@@ -457,3 +419,26 @@ void imprimeLista(Candidato *lst)
   }
 }
 //Fim da função que imprime a lista
+
+Curso* criarVetorCursos(Curso *listaCursos, int tamanhoListaCursos)
+{
+    Curso *vetor = (Curso*) calloc(tamanhoListaCursos, sizeof(Curso));
+    for (int i = 0; i < tamanhoListaCursos; i++)
+    {
+        vetor[i] = *listaCursos;
+        listaCursos = listaCursos->proximo;
+    }
+    return vetor;
+}
+
+void gerarArquivoInformacoesGerais(Curso *listaCursos, Candidato *listaCandidatos)
+{
+  Curso *vetor = criarVetorCursos(listaCursos, 113);
+  Curso** cursosOrdenados = (Curso**) malloc(113 * sizeof(Curso*));
+  for (int i = 0; i < 113; i++)
+    cursosOrdenados[i] = vetor + i;
+
+  ordenarCursosPorNome(0, 112, cursosOrdenados);
+
+  gerarArquivoFinal(cursosOrdenados, 113, listaCandidatos);
+}

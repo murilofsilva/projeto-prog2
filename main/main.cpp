@@ -13,30 +13,45 @@ int main() {
     do {
         respostaMenu = listaMenu(firstExec);
 
-        if (firstExec && respostaMenu == 0) {
-            carregaCandidato(listaCandidatosI, listaCandidatosF);
-            carregarCursos(inicioListaCursos, fimListaCursos);
-            acertos = carregaAcertosCandidatos(listaCandidatosI, listaCandidatosF, mMat, dMat, mNat, dNat, mLin, dLin, mHum, dHum, qtd);
-            firstExec = false;
-        } else if (!firstExec && respostaMenu == 0) {
-            printf("Impossivel executar esta acao mais de uma vez! Por favor, digite uma opcao valida.\n");
-        } else if (respostaMenu == 1) {
-             //chamar função relacionada
-        } else if (respostaMenu == 2) {
-            printf("***VISUALIZAR CANDIDATO***\n");
-            printf("Digite a inscricao do candidato que desejas visualizar: ");
-            scanf("%d", &insc);
-            showCandidato(listaCandidatosI, insc);
-        } else if (respostaMenu == 3) {
-             //chamar função relacionada
-        } else if (respostaMenu == 4) {
-            printf("***ALTERAR NOTAS DE REDACAO***\n");
-            printf("Informe o nome do arquivo que contem os dados para efetuar a troca: ");
-            scanf("%s", arquivoAlteraNotasRedacao);
-            printf("\n");
-            alteraNotaRedacao(arquivoAlteraNotasRedacao, acertos, qtd);  
-        } else if (respostaMenu != 5) {
-            printf("Favor digitar uma opção válida.\n");
+        switch(respostaMenu)
+        {
+            case 0:
+                if (firstExec)
+                {
+                    carregaCandidato(listaCandidatosI, listaCandidatosF);
+                    carregarCursos(inicioListaCursos, fimListaCursos);
+                    acertos = carregaAcertosCandidatos(listaCandidatosI, listaCandidatosF, mMat, dMat, mNat, dNat, mLin, dLin, mHum, dHum, qtd);
+                    firstExec = false;
+                } else
+                    printf("Impossivel executar esta acao mais de uma vez! Por favor, digite uma opcao valida.\n");
+                break;
+            case 1:
+                //TODO item 1 para gerar arquivo ordenado
+                gerarArquivoInformacoesGerais(inicioListaCursos, listaCandidatosI);
+                break;
+            case 2:
+                printf("***VISUALIZAR CANDIDATO***\n");
+                printf("Digite a inscricao do candidato que desejas visualizar: ");
+                scanf("%d", &insc);
+                showCandidato(listaCandidatosI, insc);
+                break;
+            case 3:
+                //TODO item 3 para gerar arquivo com candidatos que nao foram aprovados
+                break;
+            case 4:
+                printf("***ALTERAR NOTAS DE REDACAO***\n");
+                printf("Informe o nome do arquivo que contem os dados para efetuar a troca: ");
+                scanf("%s", arquivoAlteraNotasRedacao);
+                printf("\n");
+                alteraNotaRedacao(arquivoAlteraNotasRedacao, acertos, qtd);
+                break;
+            case 5:
+                //TODO desalocar as listas
+                printf("\nEncerrando aplicação\n");
+                break;
+            default:
+                printf("Favor digitar uma opção válida.\n");
+                break;
         }
     } while(respostaMenu != 5);
 

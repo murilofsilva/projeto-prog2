@@ -1,0 +1,1 @@
+void gerarArquivoFinal(Curso **cursosOrdenados, int quantidadeCursos, Candidato *listaCandidatos);
