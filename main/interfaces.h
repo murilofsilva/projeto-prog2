@@ -31,3 +31,5 @@ void alteraNotaRedacao(char *nomeArquivo, Acertos *&vetor, int qtd);
 void showCandidato(Candidato *listaCandidatosI, int insc);
 
 void gerarArquivoInformacoesGerais(Curso *listaCursos, Candidato *listaCandidatos);
+
+void calculaNotaFinal(Curso *listaCurso, Candidato *&listaCandidato);
